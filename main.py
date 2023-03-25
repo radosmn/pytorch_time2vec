@@ -17,6 +17,9 @@ import sys
 import argparse
 from numpy import array, save
 
+import os
+import random
+
 import torch
 from torch import nn, device, no_grad, manual_seed, backends
 from torch.optim import Adam
@@ -43,6 +46,9 @@ def run_experiment(model, data_path, sequence_length, epochs, batch_size,
                     scale=False, standarize=False, train=True)
     dataloader = DataLoader(ts, batch_size=batch_size, shuffle=False,
                             drop_last=True)
+
+    
+    random_id = random.randint(10000, 99999)
 
     if model == 'tvlstm':
         print("Time2Vec - LSTM")
@@ -83,12 +89,13 @@ def run_experiment(model, data_path, sequence_length, epochs, batch_size,
             total_loss += loss.item()
         loss_track.append(total_loss / length_data)
         print("[Epoch: %d Total Loss: %f]" % (e, loss_track[e]))
-
+    fig.savefig()
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.plot(loss_track, 'k', lw=2)
     ax.set_xlabel("Epochs", fontsize=16)
     ax.set_ylabel("Loss", fontsize=16)
+    plt.savefig(f"{model}_{random_id}.png")
     plt.show()
 
     print("Testing the trained model ...")
@@ -112,13 +119,13 @@ def run_experiment(model, data_path, sequence_length, epochs, batch_size,
         error /= len(dataloader)
         print(error)
         if model == 'tvlstm':
-            save("results/tvlstm_prediction", array(y_pred))
+            save(f"results/tvlstm_prediction_{random_id}", array(y_pred))
         elif model == 'lstm':
-            save("results/lstm_prediction", array(y_pred))
+            save(f"results/lstm_prediction_{random_id}", array(y_pred))
         elif model == 'mlp':
-            save("results/mlp_prediction", array(y_pred))
+            save(f"results/mlp_prediction_{random_id}", array(y_pred))
         elif model == 'tvmlp':
-            save("results/tvmlp_prediction", array(y_pred))
+            save(f"results/tvmlp_prediction_{random_id}", array(y_pred))
         else:
             print("Nothing stored!")
 
