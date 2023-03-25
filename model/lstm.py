@@ -88,7 +88,7 @@ class T2VLSTM(nn.Module):
         # Flag is used for initializing the states of LSTM (h0, c0)
         self.flag = 0
 
-    def forward(self, x):
+    def forward(self, x, return_embed = False):
         """
         Forward method of T2VLSTM class.
 
@@ -110,11 +110,18 @@ class T2VLSTM(nn.Module):
             self.flag = 1
         # Pass the input signal through Time2Vec layer
         out = self.t2v(x)
+
+        if return_embed:
+          return out
+        
         out, (self.h, self.c) = self.lstm(out, (self.h0, self.c0))
         m, n = out.shape[1], out.shape[2]
         out = out.reshape(-1, m * n)
         out = self.fc(out)
         return out
+    
+
+    #def t2vEmbed(self, x):
 
 
 class LSTM(nn.Module):
