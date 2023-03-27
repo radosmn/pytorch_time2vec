@@ -120,7 +120,7 @@ def run_experiment(model, data_path, sequence_length, epochs, batch_size,
         print(error)
         
         
-        torch.save(net.state_dict(), f"model_{random_id}.pth")
+        torch.save(net.state_dict(), f"model_{model}_{random_id}.pth")
         
         if not os.path.isdir("./results"):
           os.makedirs("./results")
