@@ -89,7 +89,7 @@ def run_experiment(model, data_path, sequence_length, epochs, batch_size,
             total_loss += loss.item()
         loss_track.append(total_loss / length_data)
         print("[Epoch: %d Total Loss: %f]" % (e, loss_track[e]))
-    fig.savefig()
+    #fig.savefig()
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.plot(loss_track, 'k', lw=2)
@@ -118,6 +118,9 @@ def run_experiment(model, data_path, sequence_length, epochs, batch_size,
             y_pred.append(y_hat.detach().cpu().numpy())
         error /= len(dataloader)
         print(error)
+        
+        if not os.path.isdir("./results"):
+          os.makedirs("./results")
         if model == 'tvlstm':
             save(f"results/tvlstm_prediction_{random_id}", array(y_pred))
         elif model == 'lstm':
