@@ -119,6 +119,9 @@ def run_experiment(model, data_path, sequence_length, epochs, batch_size,
         error /= len(dataloader)
         print(error)
         
+        
+        torch.save(net.state_dict(), f"model_{random_id}.pth")
+        
         if not os.path.isdir("./results"):
           os.makedirs("./results")
         if model == 'tvlstm':
